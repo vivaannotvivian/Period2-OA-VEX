@@ -12,11 +12,16 @@ from vex import *
 # Brain should be defined by default
 brain = Brain()
 
+global remote_control_code_enabled
+remote_control_code_enabled = True
 # The internal EXP inertial sensor
 brain_inertial = Inertial()
 
 # The controller
 controller = Controller()
+
+bumper_a = Bumper(brain.three_wire_port.a)
+bumper_b = Bumper(brain.three_wire_port.b)
 
 # Drive motors
 left_drive_2 = Motor(Ports.PORT6, False)
@@ -33,8 +38,6 @@ arm_motor = Motor(Ports.PORT3, False)
 # All motors are controlled from this function which is run as a separate thread
 #
 def drive_task():
-    drive_left = 0
-    drive_right = 0
 
     # setup the claw motor
     def on_L1_pressed():
@@ -45,8 +48,6 @@ def drive_task():
         while controller.buttonL1.pressing():
             wait(20, MSEC)
 
-        arm_motor.stop()
-
     # Callback function when Controller buttonL2 is pressed
     def on_L2_pressed():
         # Spinning the arm_motor in reverse lowers the Arm
@@ -56,6 +57,7 @@ def drive_task():
         while controller.buttonL2.pressing():
             wait(20, MSEC)
 
+        arm_motor.set_stopping(HOLD)
         arm_motor.stop()
 
     # Callback function when Controller buttonR1 is pressed
@@ -79,6 +81,35 @@ def drive_task():
             wait(20, MSEC)
 
         claw_motor.stop()
+    def bumper_a_pressed_callback_0():
+        global remote_control_code_enabled
+        remote_control_code_enabled = False
+        right_drive_2.stop()
+        left_drive_2.stop()
+        claw_motor.spin(REVERSE)
+        arm_motor.spin(REVERSE)
+        for repeat_count in range(20):
+            brain.screen.print("FREEZE")
+            brain.screen.next_row()
+            wait(1, SECONDS)
+            wait(5, MSEC)
+        remote_control_code_enabled = True
+        brain.screen.clear_screen()
+
+    def bumper_b_pressed_callback_0():
+        global myVariable, remote_control_code_enabled
+        remote_control_code_enabled = False
+        left_drive_2.stop()
+        right_drive_2.stop()
+        claw_motor.spin(REVERSE)
+        arm_motor.spin(REVERSE)
+        for repeat_count2 in range(20):
+            brain.screen.print("FREEZE")
+            brain.screen.next_row()
+            wait(1, SECONDS)
+            wait(5, MSEC)
+            remote_control_code_enabled = True
+            brain.screen.clear_screen()
 
 
 # Register event handlers and pass callback functions
@@ -86,12 +117,15 @@ def drive_task():
     controller.buttonL2.pressed(on_L2_pressed)
     controller.buttonR1.pressed(on_R1_pressed)
     controller.buttonR2.pressed(on_R2_pressed)
+    bumper_a.pressed(bumper_a_pressed_callback_0)
+    bumper_b.pressed(bumper_b_pressed_callback_0)
 
     # add 15ms delay to make sure events are registered correctly.
     wait(15, MSEC)
 
     # loop forever
     while True:
+        
         # buttons
         # Three values, max, 0 and -max.
         #
@@ -111,6 +145,10 @@ def drive_task():
         # Now send all drive values to motors
         leftPower   = max(min(y + x, 1.0), -1.0) * 100
         rightPower   = max(min(y - x, 1.0), -1.0) * 100
+
+        if remote_control_code_enabled == False:
+            leftPower   = 0
+            rightPower   = 0
         # The drivetrain
         left_drive_2.spin(FORWARD, leftPower, PERCENT)
         right_drive_2.spin(FORWARD, rightPower, PERCENT)
@@ -126,3 +164,4 @@ def drive_task():
 drive = Thread(drive_task)
 
 # Python now drops into REPL
+    
