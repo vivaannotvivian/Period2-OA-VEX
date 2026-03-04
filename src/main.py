@@ -87,7 +87,7 @@ def drive_task():
         right_drive_2.stop()
         left_drive_2.stop()
         claw_motor.spin(REVERSE)
-        arm_motor.spin(REVERSE)
+        arm_motor.spin(FORWARD)
         for repeat_count in range(20):
             brain.screen.print("FREEZE")
             brain.screen.next_row()
@@ -102,7 +102,7 @@ def drive_task():
         left_drive_2.stop()
         right_drive_2.stop()
         claw_motor.spin(REVERSE)
-        arm_motor.spin(REVERSE)
+        arm_motor.spin(FORWARD)
         for repeat_count2 in range(20):
             brain.screen.print("FREEZE")
             brain.screen.next_row()
