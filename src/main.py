@@ -11,7 +11,6 @@ from vex import *
 
 # Brain should be defined by default
 brain = Brain()
-
 global remote_control_code_enabled
 remote_control_code_enabled = True
 # The internal EXP inertial sensor
@@ -19,7 +18,6 @@ brain_inertial = Inertial()
 
 # The controller
 controller = Controller()
-
 bumper_a = Bumper(brain.three_wire_port.a)
 bumper_b = Bumper(brain.three_wire_port.b)
 
@@ -32,6 +30,9 @@ right_drive_2 = Motor(Ports.PORT10, True)
 claw_motor = Motor(Ports.PORT4, False)
 arm_motor = Motor(Ports.PORT3, False)
 
+arm_motor.set_stopping(HOLD)
+claw_motor.set_stopping(HOLD)
+
 # Max motor speed (percent) for motors controlled by buttons
 
 #
@@ -41,46 +42,52 @@ def drive_task():
 
     # setup the claw motor
     def on_L1_pressed():
+        global remote_control_code_enabled
+        if remote_control_code_enabled:
         # Spinning the arm_motor in forward raises the Arm
-        arm_motor.spin(FORWARD)
+            arm_motor.spin(FORWARD)
 
     # Wait until buttonL1 is released
-        while controller.buttonL1.pressing():
-            wait(20, MSEC)
+            while controller.buttonL1.pressing():
+                wait(20, MSEC)
+            arm_motor.stop()
 
     # Callback function when Controller buttonL2 is pressed
     def on_L2_pressed():
         # Spinning the arm_motor in reverse lowers the Arm
-        arm_motor.spin(REVERSE)
+        global remote_control_code_enabled
+        if remote_control_code_enabled:
+            arm_motor.spin(REVERSE)
 
     # Wait until buttonL2 is released
-        while controller.buttonL2.pressing():
-            wait(20, MSEC)
+            while controller.buttonL2.pressing():
+                wait(20, MSEC)
 
-        arm_motor.set_stopping(HOLD)
-        arm_motor.stop()
+            arm_motor.stop()
 
     # Callback function when Controller buttonR1 is pressed
     def on_R1_pressed():
-        # Spinning the claw_motor forward closes the Claw
-        claw_motor.spin(FORWARD)
+        global remote_control_code_enabled
+        if remote_control_code_enabled:
+            claw_motor.spin(FORWARD)
 
     # Wait until buttonR1 is released
-        while controller.buttonR1.pressing():
-            wait(20, MSEC)
+            while controller.buttonR1.pressing():
+                wait(20, MSEC)
 
-        claw_motor.stop()
+            claw_motor.stop()
 
     # Callback function when Controller buttonR2 is pressed
     def on_R2_pressed():
+        global remote_control_code_enabled
+        if remote_control_code_enabled:
         # Spinning the claw_motor in reverse opens the Claw
-        claw_motor.spin(REVERSE)
+            claw_motor.spin(REVERSE)
 
     # Wait until buttonR2 is released
-        while controller.buttonR2.pressing():
-            wait(20, MSEC)
-
-        claw_motor.stop()
+            while controller.buttonR2.pressing():
+                wait(20, MSEC)
+            claw_motor.stop()
     def bumper_a_pressed_callback_0():
         global remote_control_code_enabled
         remote_control_code_enabled = False
