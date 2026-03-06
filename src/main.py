@@ -31,8 +31,8 @@ claw_motor = Motor(Ports.PORT4, False)
 arm_motor = Motor(Ports.PORT3, False)
 
 
-arm_motor.set_stopping(HOLD)
-claw_motor.set_stopping(HOLD)
+arm_motor.set_stopping(BRAKE)
+claw_motor.set_stopping(BRAKE)
 
 # Max motor speed (percent) for motors controlled by buttons
 
