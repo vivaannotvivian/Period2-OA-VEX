@@ -150,8 +150,8 @@ def drive_task():
             y = 0
 
         # Now send all drive values to motors
-        leftPower   = max(min(y + x, 1.0), -1.0) * 100
-        rightPower   = max(min(y - x, 1.0), -1.0) * 100
+        leftPower   = max(min(y + x, 100), -100)
+        rightPower   = max(min(y - x, 100), -100)
 
         if remote_control_code_enabled == False:
             leftPower   = 0
