@@ -30,6 +30,7 @@ right_drive_2 = Motor(Ports.PORT10, True)
 claw_motor = Motor(Ports.PORT4, False)
 arm_motor = Motor(Ports.PORT3, False)
 
+
 arm_motor.set_stopping(HOLD)
 claw_motor.set_stopping(HOLD)
 
