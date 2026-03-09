@@ -154,12 +154,11 @@ def drive_task():
         leftPower   = max(min(y + x, 100), -100)
         rightPower   = max(min(y - x, 100), -100)
 
-        if remote_control_code_enabled == False:
-            leftPower   = 0
-            rightPower   = 0
+        if remote_control_code_enabled:
+            left_drive_2.spin(FORWARD, leftPower, PERCENT)
+            right_drive_2.spin(FORWARD, rightPower, PERCENT)
         # The drivetrain
-        left_drive_2.spin(FORWARD, leftPower, PERCENT)
-        right_drive_2.spin(FORWARD, rightPower, PERCENT)
+        
 
         # Claw and Arm motors
  
