@@ -97,7 +97,7 @@ def drive_task():
         claw_motor.spin(REVERSE)
         arm_motor.spin(FORWARD)
         for repeat_count in range(20):
-            brain.screen.print("FREEZE")
+            brain.screen.print(remote_control_code_enabled)
             brain.screen.next_row()
             wait(1, SECONDS)
             wait(5, MSEC)
@@ -105,14 +105,14 @@ def drive_task():
         brain.screen.clear_screen()
 
     def bumper_b_pressed_callback_0():
-        global myVariable, remote_control_code_enabled
+        global remote_control_code_enabled
         remote_control_code_enabled = False
         left_drive_2.stop()
         right_drive_2.stop()
         claw_motor.spin(REVERSE)
         arm_motor.spin(FORWARD)
         for repeat_count2 in range(20):
-            brain.screen.print("FREEZE")
+            brain.screen.print(remote_control_code_enabled)
             brain.screen.next_row()
             wait(1, SECONDS)
             wait(5, MSEC)
@@ -126,7 +126,7 @@ def drive_task():
     controller.buttonR1.pressed(on_R1_pressed)
     controller.buttonR2.pressed(on_R2_pressed)
     bumper_a.pressed(bumper_a_pressed_callback_0)
-    bumper_b.pressed(bumper_b_pressed_callback_0)
+    bumper_b.pressed(bumper_a_pressed_callback_0)
 
     # add 15ms delay to make sure events are registered correctly.
     wait(15, MSEC)
