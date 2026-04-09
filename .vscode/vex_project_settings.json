@@ -9,7 +9,7 @@
 		"creationDate": "2/24/2026, 9:21:32 AM",
 		"platform": "EXP",
 		"language": "python",
-		"slot": 1,
+		"slot": 7,
 		"sdkVersion": "EXP_1_0_0_21",
 		"python": {
 			"main": "src/main.py"

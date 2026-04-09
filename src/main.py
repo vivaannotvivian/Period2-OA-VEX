@@ -100,7 +100,6 @@ def drive_task():
             brain.screen.print(remote_control_code_enabled)
             brain.screen.next_row()
             wait(1, SECONDS)
-            wait(5, MSEC)
         remote_control_code_enabled = True
         brain.screen.clear_screen()
 
@@ -115,7 +114,6 @@ def drive_task():
             brain.screen.print(remote_control_code_enabled)
             brain.screen.next_row()
             wait(1, SECONDS)
-            wait(5, MSEC)
             remote_control_code_enabled = True
             brain.screen.clear_screen()
 
